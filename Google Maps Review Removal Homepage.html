@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google Maps Negative Review Removal | No Win, No Fee</title>
+<meta name="description" content="We remove unfair, fake and policy-violating negative reviews from Google Maps, one review or many at once. No Win, No Fee. Worldwide service.">
+<style>
+/* No external fonts or scripts: the page loads fast and works in every country. */
+:root{
+  --ink:#0e1f3a; --ink2:#4b5b77; --bg:#ffffff; --soft:#f0f5fa; --line:#d8e2ee;
+  --green:#0f7a56; --green-d:#0a5a40; --green-l:#e3f5ed; --amber:#f2b134; --red:#c0392b;
+  --navy:#0e1f3a; --navy2:#16305a;
+  --font:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--ink:#eef3fa;--ink2:#a9b8cf;--bg:#0b1525;--soft:#111f36;--line:#233450;--green:#2bb37f;--green-d:#1f9a6b;--green-l:#10302a}
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--font);font-size:17.5px;line-height:1.65;color:var(--ink);background:var(--bg)}
+h1,h2,h3{line-height:1.15;letter-spacing:-.015em}
+h1{font-size:clamp(2.1rem,5.4vw,3.6rem);font-weight:800}
+h2{font-size:clamp(1.7rem,3.6vw,2.4rem);font-weight:800;margin-bottom:.55rem}
+h3{font-size:1.18rem;font-weight:700;margin-bottom:.4rem}
+p{max-width:64ch}
+a{color:inherit}
+.wrap{max-width:1100px;margin:0 auto;padding:0 22px}
+section{padding:78px 0}
+.alt{background:var(--soft)}
+.sub{color:var(--ink2);margin-bottom:2.2rem}
+.center{text-align:center}.center p{margin-left:auto;margin-right:auto}
+
+/* section heading accent bar */
+.h-bar{position:relative;padding-bottom:14px;margin-bottom:.9rem}
+.h-bar::after{content:"";position:absolute;left:0;bottom:0;width:56px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--green),var(--amber))}
+.center .h-bar::after{left:50%;transform:translateX(-50%)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 26px;border-radius:10px;font:700 1rem var(--font);text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .15s,box-shadow .15s,background .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-g{background:linear-gradient(135deg,var(--green),var(--green-d));color:#fff;box-shadow:0 8px 20px rgba(15,122,86,.3)}
+.btn-g:hover{box-shadow:0 12px 26px rgba(15,122,86,.4)}
+.btn-o{border-color:var(--ink);color:var(--ink);background:transparent}
+.btn-o:hover{background:var(--ink);color:var(--bg)}
+.btn-w{background:#fff;color:var(--green-d)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+
+/* header */
+header{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:70px}
+.logo{font-weight:800;font-size:1.3rem;text-decoration:none;display:flex;align-items:center;gap:9px}
+.logo i{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--green),var(--navy2));display:inline-block;position:relative}
+.logo i::after{content:"★";position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-style:normal;font-size:.9rem}
+.nav nav{display:flex;gap:24px;align-items:center}
+.nav nav a{text-decoration:none;color:var(--ink2);font-weight:600;font-size:.95rem}
+.nav nav a:hover{color:var(--green)}
+.nav nav a.btn{color:#fff;padding:10px 20px}
+@media(max-width:760px){.nav nav a.hide{display:none}}
+
+/* hero */
+.hero{padding:70px 0 90px;background:
+  radial-gradient(900px 420px at 85% -10%,rgba(15,122,86,.16),transparent 60%),
+  radial-gradient(700px 400px at -5% 100%,rgba(242,177,52,.14),transparent 60%),var(--bg)}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:52px;align-items:center}
+.pill{display:inline-block;background:var(--green-l);color:var(--green-d);font-weight:700;font-size:.88rem;padding:6px 14px;border-radius:999px;margin-bottom:18px}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .pill{color:var(--green)}}
+.hero p.lead{font-size:1.2rem;color:var(--ink2);margin:20px 0 30px}
+.cta{display:flex;flex-wrap:wrap;gap:14px}
+.ticks{margin-top:28px;display:flex;flex-wrap:wrap;gap:8px 24px;color:var(--ink2);font-size:.95rem;font-weight:600}
+.ticks span::before{content:"✔ ";color:var(--green)}
+@media(max-width:880px){.hero-grid{grid-template-columns:1fr}}
+
+/* review card */
+.rcard{position:relative;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 22px 50px rgba(14,31,58,.18);transform:rotate(1.8deg)}
+.rcard::before{content:"";position:absolute;inset:-14px -14px 14px 14px;border-radius:18px;background:linear-gradient(135deg,var(--green-l),transparent);z-index:-1}
+.who{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--line),var(--soft))}
+.who b{display:block;font-size:.95rem;line-height:1.2}.who small{color:var(--ink2)}
+.stars{color:var(--amber);letter-spacing:2px;font-size:1.15rem}.stars i{color:var(--line);font-style:normal}
+.rcard p{font-size:.98rem;margin-top:8px;color:var(--ink2)}
+.stamp{position:absolute;right:18px;bottom:18px;border:3px solid var(--green);color:var(--green);font:800 1.3rem var(--font);padding:4px 14px;border-radius:6px;transform:rotate(-9deg);background:var(--bg);letter-spacing:.04em;animation:pop .6s .5s both}
+@keyframes pop{from{opacity:0;transform:rotate(-9deg) scale(1.8)}to{opacity:1;transform:rotate(-9deg) scale(1)}}
+.rcard .ex{position:absolute;left:24px;bottom:-28px;font-size:.8rem;color:var(--ink2)}
+
+/* platform strip */
+.strip{background:var(--navy);color:#dbe6f6;padding:22px 0}
+.strip .wrap{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 40px;font-weight:700;font-size:1.05rem}
+.strip span::before{content:"●";color:var(--amber);margin-right:10px;font-size:.7rem;vertical-align:middle}
+
+/* problem */
+.problem{max-width:780px}
+
+/* cards */
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:22px}
+.svc{background:var(--bg);padding:26px;border-radius:14px;border:1px solid var(--line);border-top:5px solid var(--green);transition:transform .2s,box-shadow .2s}
+.svc:hover{transform:translateY(-5px);box-shadow:0 16px 34px rgba(14,31,58,.13)}
+.svc p{color:var(--ink2);font-size:1rem}
+.ico{width:46px;height:46px;border-radius:12px;background:var(--green-l);color:var(--green);display:grid;place-items:center;font-size:1.4rem;margin-bottom:14px;font-weight:800}
+
+/* bulk band */
+.bulk{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:20px;padding:46px;display:grid;grid-template-columns:1.2fr .8fr;gap:34px;align-items:center;box-shadow:0 24px 50px rgba(14,31,58,.3)}
+.bulk h2{color:#fff}
+.bulk p{color:#cbd9ee}
+.bulk ul{list-style:none;padding:0;margin:16px 0 0}
+.bulk li{margin:8px 0;padding-left:28px;position:relative;color:#e6eefb}
+.bulk li::before{content:"✔";position:absolute;left:0;color:var(--amber);font-weight:800}
+.bulk .side{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:26px;text-align:center}
+.bulk .side b{display:block;font-size:1.3rem;margin-bottom:6px}
+.bulk .side p{margin:0 auto 18px;font-size:.98rem}
+@media(max-width:860px){.bulk{grid-template-columns:1fr;padding:32px 24px}}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;counter-reset:s;position:relative}
+.step{position:relative;padding:26px 24px 24px 24px;background:var(--bg);border:1px solid var(--line);border-radius:14px}
+.step::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-d));color:#fff;font:800 1.3rem var(--font);margin-bottom:14px;box-shadow:0 6px 14px rgba(15,122,86,.35)}
+.step p{color:var(--ink2);font-size:1rem}
+
+/* pricing */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
+.pc{background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:32px;display:flex;flex-direction:column}
+.pc.feat{border:2px solid var(--green);box-shadow:0 18px 40px rgba(15,122,86,.16);position:relative}
+.pc.feat::before{content:"Most popular";position:absolute;top:-14px;left:28px;background:var(--green);color:#fff;font-size:.8rem;font-weight:700;padding:4px 12px;border-radius:999px}
+.pc.dark{background:linear-gradient(160deg,var(--green),var(--green-d));color:#fff;border:0}
+.pc.dark p,.pc.dark li{color:#e6f6ef}
+.amt{font-size:clamp(2.2rem,4.5vw,3rem);font-weight:800;line-height:1.05;margin:8px 0 4px}
+.amt small{font-size:.95rem;font-weight:600;color:var(--ink2)}
+.pc ul{list-style:none;padding:0;margin:16px 0 22px;flex:1}
+.pc li{margin:8px 0;padding-left:26px;position:relative;font-size:1rem}
+.pc li::before{content:"✔";position:absolute;left:0;color:var(--green);font-weight:800}
+.pc.dark li::before{color:#fff}
+.pc .btn{width:100%}
+@media(max-width:900px){.pgrid{grid-template-columns:1fr}}
+
+/* contact */
+.cgrid{display:grid;grid-template-columns:.85fr 1.15fr;gap:46px;align-items:start}
+@media(max-width:880px){.cgrid{grid-template-columns:1fr}}
+.cbox{background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:30px;box-shadow:0 16px 38px rgba(14,31,58,.1)}
+form{display:grid;gap:15px}
+label{font-weight:600;font-size:.93rem;display:block;margin-bottom:5px}
+input,textarea{width:100%;padding:13px 15px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:1rem var(--font);transition:border-color .15s,box-shadow .15s}
+input:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(15,122,86,.15);outline:none}
+textarea{min-height:110px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+@media(max-width:560px){.two{grid-template-columns:1fr}}
+#msg{font-weight:600;color:var(--green);min-height:1.4em}
+.contact-list{list-style:none;padding:0;margin-top:22px}
+.contact-list li{margin:10px 0;color:var(--ink2);font-weight:600}
+.contact-list li::before{content:"✔ ";color:var(--green)}
+
+footer{background:var(--navy);color:#b9c8de;padding:38px 0;font-size:.92rem}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 30px;justify-content:space-between}
+footer a{color:#fff}
+
+/* floating whatsapp */
+.wa{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:50;display:flex;align-items:center;gap:9px;background:#25d366;color:#06361d;font-weight:800;padding:14px 20px;border-radius:999px;text-decoration:none;box-shadow:0 10px 26px rgba(0,0,0,.3);transition:transform .15s}
+.wa:hover{transform:scale(1.06)}
+.wa svg{width:22px;height:22px;fill:currentColor}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#top"><i></i>YourBrand ORM</a>
+    <nav>
+      <a class="hide" href="#services">Services</a>
+      <a class="hide" href="#bulk">Bulk removal</a>
+      <a class="hide" href="#process">Process</a>
+      <a class="hide" href="#pricing">Pricing</a>
+      <a class="btn btn-g" href="#contact">Get a quote</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="pill">Serving businesses worldwide</span>
+      <h1>Unfair negative reviews hurting your business? We get them removed.</h1>
+      <p class="lead">We remove unfair, fake and policy-violating negative reviews from your Google Maps listing, one review or all of them at once, and help you rebuild the reputation your business deserves. <strong>No Win, No Fee.</strong></p>
+      <div class="cta">
+        <a class="btn btn-g" href="https://wa.me/YOUR_NUMBER?text=Hi%2C%20I%20need%20a%20quote%20for%20review%20removal" target="_blank" rel="noopener">Get a quote on WhatsApp</a>
+        <a class="btn btn-o" href="#contact">Email us</a>
+      </div>
+      <div class="ticks"><span>No Win, No Fee</span><span>Bulk removal available</span><span>Fast replies on WhatsApp</span></div>
+    </div>
+    <div aria-hidden="true">
+      <div class="rcard">
+        <div class="who"><div class="av"></div><div><b>Anonymous reviewer</b><small>1 review</small></div></div>
+        <div class="stars">★<i>★★★★</i></div>
+        <p>“Never visited, but heard they are terrible. Avoid!!”</p>
+        <div style="height:48px"></div>
+        <div class="stamp">REMOVED</div>
+        <span class="ex">Example only</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="strip"><div class="wrap"><span>Google Maps</span><span>Google Business Profile</span><span>Google Reviews</span></div></div>
+
+<!-- PROBLEM -->
+<section class="alt">
+  <div class="wrap problem">
+    <h2 class="h-bar">One bad review can cost you hundreds of customers</h2>
+    <p class="sub" style="margin:0">Most customers read reviews before they buy. A single fake, abusive or rule-breaking review can send potential clients straight to your competitors. You shouldn’t have to live with it.</p>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="wrap">
+    <h2 class="h-bar">Our review removal services</h2>
+    <p class="sub">We focus on one platform, Google Maps, so we know it inside out.</p>
+    <div class="grid4">
+      <div class="svc"><div class="ico">G</div><h3>Fake and spam reviews</h3><p>Reviews from people who never used your business, bots, or spam accounts on your Google Maps listing.</p></div>
+      <div class="svc"><div class="ico">!</div><h3>Policy-violating reviews</h3><p>Reviews with abuse, harassment, off-topic content, false statements or conflicts of interest that break Google’s review policies.</p></div>
+      <div class="svc"><div class="ico">⚑</div><h3>Competitor attacks</h3><p>Coordinated or malicious reviews left to damage your rating. We flag them through the correct channels.</p></div>
+      <div class="svc"><div class="ico">★</div><h3>Reputation restoration</h3><p>After removal, we help you earn genuine positive feedback from happy customers to rebuild trust.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- BULK -->
+<section id="bulk" class="alt">
+  <div class="wrap">
+    <div class="bulk">
+      <div>
+        <h2>Remove all your negative reviews together</h2>
+        <p>Have many unfair reviews on your Google Maps listing? We handle them in one batch, so you don’t need to deal with them one by one.</p>
+        <ul>
+          <li>Send all your review links in one message</li>
+          <li>We check every review and tell you which ones qualify</li>
+          <li>One agreed price for the whole batch</li>
+          <li>You pay only for the reviews that are removed</li>
+        </ul>
+      </div>
+      <div class="side">
+        <b>Need a price for many reviews?</b>
+        <p>Contact us on WhatsApp or Gmail with your links and we’ll quote the full batch.</p>
+        <a class="btn btn-w" href="https://wa.me/YOUR_NUMBER?text=Hi%2C%20I%20want%20a%20quote%20to%20remove%20multiple%20reviews" target="_blank" rel="noopener">WhatsApp us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="wrap">
+    <h2 class="h-bar">A simple 3-step process</h2>
+    <p class="sub">Everything is handled directly with you on WhatsApp or email.</p>
+    <div class="steps">
+      <div class="step"><h3>Contact us</h3><p>Message us on WhatsApp or send an email with your business details and the link to each review.</p></div>
+      <div class="step"><h3>We assess and quote</h3><p>We check which reviews qualify for removal and give you a clear price, for one review or the whole batch. No hidden charges.</p></div>
+      <div class="step"><h3>Removal, then payment</h3><p>We submit and follow up on the removal. You only pay when a review is actually removed.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="alt">
+  <div class="wrap">
+    <h2 class="h-bar">Clear pricing. No surprises.</h2>
+    <p class="sub">To get your exact price, contact us on WhatsApp or Gmail with your review links. We confirm the price before we start.</p>
+    <div class="pgrid">
+      <div class="pc">
+        <h3>Single review</h3>
+        <div class="amt">$100–$200 <small>per review</small></div>
+        <ul>
+          <li>Google Maps reviews</li>
+          <li>Price depends on the case</li>
+          <li>Pay only if it’s removed</li>
+        </ul>
+        <a class="btn btn-o" href="https://wa.me/YOUR_NUMBER" target="_blank" rel="noopener">Ask on WhatsApp</a>
+      </div>
+      <div class="pc feat">
+        <h3>Multiple reviews</h3>
+        <div class="amt">Custom <small>quote</small></div>
+        <ul>
+          <li>Remove many reviews together</li>
+          <li>One agreed price for the batch</li>
+          <li>Contact us for your price</li>
+        </ul>
+        <a class="btn btn-g" href="#contact">Get a quote</a>
+      </div>
+      <div class="pc dark">
+        <h3>No Win, No Fee</h3>
+        <div class="amt">$0 <small style="color:#cfeede">if not removed</small></div>
+        <ul>
+          <li>No charge for reviews that stay</li>
+          <li>We only earn when you get results</li>
+          <li>Price agreed before we begin</li>
+        </ul>
+        <a class="btn btn-w" href="https://wa.me/YOUR_NUMBER" target="_blank" rel="noopener">Start on WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section>
+  <div class="wrap">
+    <h2 class="h-bar">Why businesses trust us</h2>
+    <div class="grid4" style="margin-top:26px">
+      <div class="svc"><h3>Results-based</h3><p>No Win, No Fee means our interests match yours.</p></div>
+      <div class="svc"><h3>Transparent</h3><p>You know the cost before we begin.</p></div>
+      <div class="svc"><h3>Direct contact</h3><p>Talk to us personally on WhatsApp or email.</p></div>
+      <div class="svc"><h3>Confidential</h3><p>Your business details stay private.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="alt">
+  <div class="wrap cgrid">
+    <div>
+      <h2 class="h-bar">Ready to clean up your online reputation?</h2>
+      <p class="sub" style="margin-bottom:1.4rem">Send us your review link or all your links together. We’ll reply with a clear price.</p>
+      <div class="cta">
+        <a class="btn btn-g" href="https://wa.me/YOUR_NUMBER" target="_blank" rel="noopener">Chat on WhatsApp</a>
+        <a class="btn btn-o" href="mailto:YOUR_EMAIL@gmail.com">Email us</a>
+      </div>
+      <ul class="contact-list">
+        <li>Final deals on WhatsApp or Gmail</li>
+        <li>No Win, No Fee</li>
+        <li>Open to businesses in every country</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <form id="cf" novalidate>
+        <div class="two">
+          <div><label for="n">Name</label><input id="n" autocomplete="name" required></div>
+          <div><label for="b">Business name</label><input id="b" autocomplete="organization"></div>
+        </div>
+        <div class="two">
+          <div><label for="e">Email</label><input id="e" type="email" autocomplete="email" required></div>
+          <div><label for="w">WhatsApp number</label><input id="w" type="tel" autocomplete="tel"></div>
+        </div>
+        <div><label for="l">Review link(s)</label><textarea id="l" placeholder="Paste one link, or all your links together" required></textarea></div>
+        <div><label for="m">Message (optional)</label><input id="m"></div>
+        <button class="btn btn-g" type="submit">Request a quote</button>
+        <p id="msg" role="status"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 YourBrand ORM. All rights reserved.</span>
+    <span><a href="#">Privacy Policy</a> &nbsp;|&nbsp; <a href="#">Terms of Service</a></span>
+    <span style="flex-basis:100%">We are not affiliated with Google.</span>
+  </div>
+</footer>
+
+<a class="wa" href="https://wa.me/YOUR_NUMBER?text=Hi%2C%20I%20need%20a%20quote%20for%20review%20removal" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.100L2 22l5-1.300A10 10 0 1 0 12 2zm5.200 14.200c-.2.600-1.300 1.200-1.800 1.300-.5.100-1.100.100-1.700-.1-.4-.1-.9-.3-1.600-.6-2.800-1.200-4.600-4-4.700-4.200-.1-.2-1.100-1.500-1.100-2.900s.7-2 1-2.300c.2-.3.500-.3.700-.3h.5c.2 0 .4 0 .6.500l.9 2.100c.1.200.1.300 0 .5l-.3.500-.4.500c-.2.200-.3.300-.1.700.2.300.8 1.200 1.700 2 1.100 1 2 1.300 2.300 1.400.3.200.5.100.6-.1l.9-1.100c.2-.3.400-.2.700-.1l2 1c.3.100.5.200.5.300.1.200.1.700-.1 1.200z"/></svg>
+  WhatsApp
+</a>
+
+<script>
+/* Fallback form: opens the visitor's email app with the details filled in.
+   In WordPress, replace this with WPForms / Contact Form 7 for real submissions. */
+document.getElementById('cf').addEventListener('submit',function(ev){
+  ev.preventDefault();
+  var g=function(i){return document.getElementById(i).value.trim()};
+  var out=document.getElementById('msg');
+  if(!g('n')||!g('e')||!g('l')){out.style.color='var(--red)';out.textContent='Please fill in your name, email and review link(s).';return}
+  var body='Name: '+g('n')+'\nBusiness: '+g('b')+'\nEmail: '+g('e')+'\nWhatsApp: '+g('w')+'\nReview link(s): '+g('l')+'\nMessage: '+g('m');
+  window.location.href='mailto:YOUR_EMAIL@gmail.com?subject='+encodeURIComponent('Quote request: review removal')+'&body='+encodeURIComponent(body);
+  out.style.color='var(--green)';out.textContent='Opening your email app. Please press Send there.';
+});
+</script>
+</body>
+</html>
